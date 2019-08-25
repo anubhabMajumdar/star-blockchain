@@ -21,7 +21,6 @@ class BlockData {
     }
 }
 
-
 class Blockchain {
 
     /**
@@ -128,7 +127,7 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             var timeFromMessage = parseInt(message.split(':')[1])
             var currentTime = parseInt(new Date().getTime().toString().slice(0, -3))
-            if (currentTime - timeFromMessage >= 5) {
+            if (currentTime - timeFromMessage >= 5000 * 60) {
                 reject("Mesage generated more than or equal to 5 minutes ago.")
                 return
             }
@@ -137,8 +136,8 @@ class Blockchain {
                 reject("Mesage cannot be verified.")
                 return
             }
-            var blockData = new BlockData({owner: address, star: star})
-            var currentBlock = new BlockClass.Block({data: blockData})
+            var blockData = new BlockData(address, star)
+            var currentBlock = new BlockClass.Block(blockData)
             
             self._addBlock(currentBlock).then(block => {
                 resolve(block)
@@ -154,10 +153,11 @@ class Blockchain {
      * Search on the chain array for the block that has the hash.
      * @param {*} hash 
      */
+
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-            let block = self.chain.filter(p => p.hash === hash)[0];
+            let block = self.chain.filter(block => block.hash == hash);
             if(block){
                 resolve(block);
             } else {
@@ -189,14 +189,13 @@ class Blockchain {
      * Remember the star should be returned decoded.
      * @param {*} address 
      */
-    getStarsByWalletAddress (address) {
+    getStarsByWalletAddress(address) {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
             for (var i=0; i<self.chain.length; i++) {
                 var decodedData = self.chain[i].getBData()
-                console.log(decodedData)
-                if (decodedData.owner == address) {
+                if (decodedData != null && decodedData.owner == address) {
                     stars.push(decodedData)
                 }
             }

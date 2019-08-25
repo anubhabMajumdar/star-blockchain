@@ -71,12 +71,11 @@ class Block {
         var decodedDataJSON = null
         try {
             if (this.height > 0) {
-                decodedDataJSON = JSON.parse(hex2ascii(this.data))
+                decodedDataJSON = JSON.parseJ(hex2ascii(this.body))
             }
         } catch (error) {
-            return error
+            console.log("Error decoding block " + this + ". Error: " + error)
         }
-
         // Resolve with the data if the object isn't the Genesis block
         return decodedDataJSON
     }
