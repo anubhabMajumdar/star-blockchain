@@ -1,3 +1,12 @@
+# Test the app
+* Clone the repostory.
+* Go inside the folder and run the command `npm install`.
+* Run the project using the command: `node app.js`.
+
+# [Screenshots](screenshots)
+
+
+
 # Private Blockchain Application
 
 You are starting your journey as a Blockchain Developer, this project allows you to demonstrate
