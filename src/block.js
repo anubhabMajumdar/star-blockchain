@@ -71,7 +71,7 @@ class Block {
         var decodedDataJSON = null
         try {
             if (this.height > 0) {
-                decodedDataJSON = JSON.parseJ(hex2ascii(this.body))
+                decodedDataJSON = JSON.parse(hex2ascii(this.body))
             }
         } catch (error) {
             console.log("Error decoding block " + this + ". Error: " + error)

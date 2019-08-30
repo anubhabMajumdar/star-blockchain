@@ -73,18 +73,17 @@ class Blockchain {
     _addBlock(block) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-           self.height = self.height + 1
-           block.height = self.height
+           block.height = self.height + 1
            block.time = new Date().getTime().toString().slice(0,-3)
-           if (self.height > 0) {
-                block.previousBlockHash = self.chain[self.height-1].hash
+           if (self.height >= 0) {
+                block.previousBlockHash = self.chain[self.height].hash
            }
            block.hash = SHA256(JSON.stringify(block)).toString()
            let newHeight = self.chain.push(block)
-           if (newHeight - self.height == 1) {
+           if (newHeight - (self.height + 1) == 1) {
+                self.height = self.height + 1
                 resolve(block)
            } else {
-                self.height = self.height - 1
                 reject(addBlockERR)
            }
         });
@@ -127,7 +126,7 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             var timeFromMessage = parseInt(message.split(':')[1])
             var currentTime = parseInt(new Date().getTime().toString().slice(0, -3))
-            if (currentTime - timeFromMessage >= 5000 * 60) {
+            if (currentTime - timeFromMessage >= 5 * 60) {
                 reject("Mesage generated more than or equal to 5 minutes ago.")
                 return
             }
